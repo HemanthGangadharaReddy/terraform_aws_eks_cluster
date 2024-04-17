@@ -22,16 +22,17 @@ resource "aws_eks_cluster" "eks_cluster" {
 
   vpc_config {
     subnet_ids              = module.subnets.private_subnet_ids
-    security_group_ids      = var.security_group_ids
+    security_group_ids      = [module.vpc.security_group_id]
     endpoint_private_access = try(var.endpoint_private_access, false)
     endpoint_public_access  = try(var.endpoint_public_access, true)
     public_access_cidrs     = try(var.public_access_cidrs, "0.0.0.0/0")
   }
 
   enabled_cluster_log_types = var.enabled_cluster_log_types
-  encryption_config         = var.encryption_config
   tags                      = var.tags
-  access_config             = try(var.access_config, null)
-  kubernetes_network_config = try(var.kubernetes_network_config, null)
-  outpost_config            = try(var.outpost_config, null)
+
+  access_config {
+    authentication_mode                         = try(var.authentication_mode, "CONFIG_MAP")
+    bootstrap_cluster_creator_admin_permissions = try(var.bootstrap_cluster_creator_admin_permissions, true)
+  }
 }

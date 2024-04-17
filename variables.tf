@@ -37,12 +37,14 @@ variable "cluster_name" {
 variable "kubernetes_version" {
   description = "Desired Kubernetes master version"
   type        = string
+  default = "1.27"
 }
 
-variable "security_group_ids" {
-  description = "List of security group IDs to associate with EKS resources"
-  type        = list(string)
-}
+# variable "security_group_ids" {
+#   description = "List of security group IDs to associate with EKS resources"
+#   type        = list(string)
+#   default = ["sg-0920f778608dc3bf1"]
+# }
 
 variable "endpoint_private_access" {
   description = "Indicates whether or not the Amazon EKS private API server endpoint is enabled"
@@ -57,6 +59,7 @@ variable "endpoint_public_access" {
 variable "public_access_cidrs" {
   description = "CIDR blocks for Amazon EKS public API server endpoint access"
   type        = list(string)
+  default = ["0.0.0.0/0"]
 }
 
 variable "enabled_cluster_log_types" {
@@ -77,20 +80,20 @@ variable "tags" {
   default     = {}
 }
 
-variable "access_config" {
-  description = "Configuration block for access control of the API server endpoint"
-  type        = any
-  default     = null
+variable "authentication_mode" {
+  description = "The authentication mode for the cluster"
+  type = string
+  default = "CONFIG_MAP"
+}
+
+variable "bootstrap_cluster_creator_admin_permissions" {
+  description = "Whether or not to bootstrap the access config values to the cluster"
+  type = bool
+  default = true
 }
 
 variable "kubernetes_network_config" {
   description = "Configuration block for Kubernetes network settings"
-  type        = any
-  default     = null
-}
-
-variable "outpost_config" {
-  description = "Configuration block for an AWS Outpost configuration"
   type        = any
   default     = null
 }
