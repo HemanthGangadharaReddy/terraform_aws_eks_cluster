@@ -48,11 +48,13 @@ variable "kubernetes_version" {
 
 variable "endpoint_private_access" {
   description = "Indicates whether or not the Amazon EKS private API server endpoint is enabled"
+  type = bool
   default     = false
 }
 
 variable "endpoint_public_access" {
   description = "Indicates whether or not the Amazon EKS public API server endpoint is enabled"
+  type = bool
   default     = true
 }
 
@@ -68,12 +70,6 @@ variable "enabled_cluster_log_types" {
   default     = []
 }
 
-variable "encryption_config" {
-  description = "Configuration block with server-side encryption settings for the cluster"
-  type        = any
-  default     = null
-}
-
 variable "tags" {
   description = "A mapping of tags to assign to the resources"
   type        = map(string)
@@ -81,7 +77,7 @@ variable "tags" {
 }
 
 variable "authentication_mode" {
-  description = "The authentication mode for the cluster"
+  description = "The authentication mode for the cluster. Valid values are `CONFIG_MAP`, `API` or `API_AND_CONFIG_MAP`"
   type = string
   default = "CONFIG_MAP"
 }
@@ -92,8 +88,14 @@ variable "bootstrap_cluster_creator_admin_permissions" {
   default = true
 }
 
-variable "kubernetes_network_config" {
-  description = "Configuration block for Kubernetes network settings"
-  type        = any
-  default     = null
+variable "resources" {
+  description = "List of strings with resources to be encrypted"
+  type = list(string)
+  default = ["secrets"]
 }
+
+# variable "kubernetes_network_config" {
+#   description = "Configuration block for Kubernetes network settings"
+#   type        = any
+#   default     = null
+# }

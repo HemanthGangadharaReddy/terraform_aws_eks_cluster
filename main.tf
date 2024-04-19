@@ -15,6 +15,10 @@ module "subnets" {
   subnet_name       = var.subnet_name
 }
 
+module "kms" {
+  source = "github.com/saikrishnama/terraform-module-aws-kms"
+}
+
 resource "aws_eks_cluster" "eks_cluster" {
   name     = var.cluster_name
   role_arn = module.iam_role.eks_iam_role_arn
@@ -30,6 +34,13 @@ resource "aws_eks_cluster" "eks_cluster" {
 
   enabled_cluster_log_types = var.enabled_cluster_log_types
   tags                      = var.tags
+
+  encryption_config {
+    provider {
+      key_arn = module.kms.kms_arn[0]
+    }
+    resources = var.resources
+  }
 
   access_config {
     authentication_mode                         = try(var.authentication_mode, "CONFIG_MAP")
