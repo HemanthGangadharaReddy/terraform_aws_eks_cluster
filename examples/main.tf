@@ -1,3 +1,3 @@
 module "my-eks" {
-    source = "../"
+  source = "../"
 }
