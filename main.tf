@@ -35,6 +35,11 @@ resource "aws_eks_cluster" "eks_cluster" {
   enabled_cluster_log_types = var.enabled_cluster_log_types
   tags                      = var.tags
 
+  access_config {
+    authentication_mode                         = try(var.authentication_mode, "CONFIG_MAP")
+    bootstrap_cluster_creator_admin_permissions = try(var.bootstrap_cluster_creator_admin_permissions, true)
+  }
+
   encryption_config {
     provider {
       key_arn = module.kms.kms_arn[0]
@@ -42,8 +47,9 @@ resource "aws_eks_cluster" "eks_cluster" {
     resources = var.resources
   }
 
-  access_config {
-    authentication_mode                         = try(var.authentication_mode, "CONFIG_MAP")
-    bootstrap_cluster_creator_admin_permissions = try(var.bootstrap_cluster_creator_admin_permissions, true)
+  kubernetes_network_config {
+    service_ipv4_cidr = try(var.service_ipv4_cidr, null)
+    ip_family         = try(var.ip_family, "ipv4")
   }
+
 }

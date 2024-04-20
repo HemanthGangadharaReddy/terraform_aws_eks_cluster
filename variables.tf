@@ -37,31 +37,25 @@ variable "cluster_name" {
 variable "kubernetes_version" {
   description = "Desired Kubernetes master version"
   type        = string
-  default = "1.27"
+  default     = "1.27"
 }
-
-# variable "security_group_ids" {
-#   description = "List of security group IDs to associate with EKS resources"
-#   type        = list(string)
-#   default = ["sg-0920f778608dc3bf1"]
-# }
 
 variable "endpoint_private_access" {
   description = "Indicates whether or not the Amazon EKS private API server endpoint is enabled"
-  type = bool
+  type        = bool
   default     = false
 }
 
 variable "endpoint_public_access" {
   description = "Indicates whether or not the Amazon EKS public API server endpoint is enabled"
-  type = bool
+  type        = bool
   default     = true
 }
 
 variable "public_access_cidrs" {
   description = "CIDR blocks for Amazon EKS public API server endpoint access"
   type        = list(string)
-  default = ["0.0.0.0/0"]
+  default     = ["0.0.0.0/0"]
 }
 
 variable "enabled_cluster_log_types" {
@@ -78,24 +72,30 @@ variable "tags" {
 
 variable "authentication_mode" {
   description = "The authentication mode for the cluster. Valid values are `CONFIG_MAP`, `API` or `API_AND_CONFIG_MAP`"
-  type = string
-  default = "CONFIG_MAP"
+  type        = string
+  default     = "CONFIG_MAP"
 }
 
 variable "bootstrap_cluster_creator_admin_permissions" {
   description = "Whether or not to bootstrap the access config values to the cluster"
-  type = bool
-  default = true
+  type        = bool
+  default     = true
 }
 
 variable "resources" {
   description = "List of strings with resources to be encrypted"
-  type = list(string)
-  default = ["secrets"]
+  type        = list(string)
+  default     = ["secrets"]
 }
 
-# variable "kubernetes_network_config" {
-#   description = "Configuration block for Kubernetes network settings"
-#   type        = any
-#   default     = null
-# }
+variable "service_ipv4_cidr" {
+  description = "The CIDR block to assign Kubernetes pod and service IP addresses from. If you don't specify a block, Kubernetes assigns addresses from either the 10.100.0.0/16 or 172.20.0.0/16 CIDR blocks."
+  type        = string
+  default     = null
+}
+
+variable "ip_family" {
+  description = "The IP family used to assign Kubernetes pod and service addresses. Valid values are ipv4 (default) and ipv6"
+  type        = string
+  default     = "ipv4"
+}
