@@ -46,6 +46,14 @@ jobs:
                 with:
                   directory: ${{ matrix.directory }}
 
+              - name: Set up Terraform
+                uses: hashicorp/setup-terraform@v3
+                with:
+                  terraform_version: latest
+
+              - name: Initialize Terraform
+                run: terraform init
+
               - name: Pre-commit Terraform ${{ steps.minMax.outputs.minVersion }}
                 # Run only validate pre-commit check on min version supported
                 if: ${{ matrix.directory !=  '.' }}
